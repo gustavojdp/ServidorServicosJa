@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class ServidorServicosJaApplication {
 
-	public static String PORTA_PADRAO = "3000";
+	public static String PORTA_PADRAO = "6001";
 
 	public static void main(String[] args) {
 		// Inicia o Spring Boot
@@ -42,6 +42,7 @@ public class ServidorServicosJaApplication {
 
 		// Loop para aguardar comandos
 		for (;;) {
+			System.out.println(porta);
 			System.out.println("O servidor está ativo! Para desativá-lo,");
 			System.out.println("use o comando \"desativar\"\n");
 			System.out.print("> ");
