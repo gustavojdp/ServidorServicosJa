@@ -3,6 +3,7 @@ package com.example.ServidorServicosJa.service;
 import com.example.ServidorServicosJa.model.dbMongo;
 import com.example.ServidorServicosJa.repository.dbMongoRepository;
 import jakarta.annotation.PostConstruct;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,19 @@ public class dbMongoService {
 
     public List<dbMongo> listar() {
         return mongoRepository.findAll();
+    }
+
+
+    public List<dbMongo> listarUsuarios() {
+        return mongoRepository.findAll();
+    }
+
+    public dbMongo buscarUsuarioPorId(String id) {
+        return mongoRepository.findById(id).orElse(null);
+    }
+
+    public dbMongo salvarUsuario(dbMongo usuario) {
+        return mongoRepository.save(usuario);
     }
 }
 
