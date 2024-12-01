@@ -42,7 +42,6 @@ public class ServidorServicosJaApplication {
 
 		// Loop para aguardar comandos
 		for (;;) {
-			System.out.println(porta);
 			System.out.println("O servidor está ativo! Para desativá-lo,");
 			System.out.println("use o comando \"desativar\"\n");
 			System.out.print("> ");

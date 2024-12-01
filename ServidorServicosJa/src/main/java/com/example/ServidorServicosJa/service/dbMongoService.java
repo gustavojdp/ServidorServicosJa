@@ -30,18 +30,17 @@ public class dbMongoService {
         }
     }
 
-    public dbMongo salvar(dbMongo novo) {
-        return mongoRepository.save(novo);
-    }
-
-    public List<dbMongo> listar() {
-        return mongoRepository.findAll();
-    }
-
-
     public List<dbMongo> listarUsuarios() {
-        return mongoRepository.findAll();
+        List<dbMongo> usuarios = mongoRepository.findAll();
+        System.out.println("Usuários encontrados: " + usuarios.size());
+
+        // Teste com MongoTemplate
+        List<dbMongo> usuariosTemplate = mongoTemplate.findAll(dbMongo.class);
+        System.out.println("Usuários encontrados no MongoTemplate: " + usuariosTemplate.size());
+
+        return usuarios;
     }
+
 
     public dbMongo buscarUsuarioPorId(String id) {
         return mongoRepository.findById(id).orElse(null);

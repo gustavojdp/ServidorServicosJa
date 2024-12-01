@@ -12,11 +12,6 @@ import java.util.List;
 @RequestMapping("/status")
 public class StatusController {
 
-    @GetMapping
-    public ResponseEntity getStatusUser(){
-        return ResponseEntity.ok("deu ok");
-    }
-
     @Autowired
     private dbMongoService userService;
 
