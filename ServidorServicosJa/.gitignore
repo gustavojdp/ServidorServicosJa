@@ -1,9 +1,4 @@
 HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!target/ServidorServicosJa-0.0.1-SNAPSHOT.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
 ### STS ###
 .apt_generated

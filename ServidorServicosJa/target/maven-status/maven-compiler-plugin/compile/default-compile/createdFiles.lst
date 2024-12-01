@@ -1,0 +1,13 @@
+com\example\ServidorServicosJa\model\dbMongo.class
+com\example\ServidorServicosJa\service\dbMongoService.class
+com\example\ServidorServicosJa\controllers\StatusController.class
+com\example\ServidorServicosJa\PedidoParaSair.class
+com\example\ServidorServicosJa\Teclado.class
+com\example\ServidorServicosJa\Comunicado.class
+com\example\ServidorServicosJa\repository\dbMongoRepository.class
+com\example\ServidorServicosJa\ServidorServicosJaApplication.class
+com\example\ServidorServicosJa\SupervisoraDeConexao.class
+com\example\ServidorServicosJa\AceitadoraDeConexao.class
+com\example\ServidorServicosJa\ComunicadoDeDesligamento.class
+com\example\ServidorServicosJa\model\dbMongo$Address.class
+com\example\ServidorServicosJa\Parceiro.class
