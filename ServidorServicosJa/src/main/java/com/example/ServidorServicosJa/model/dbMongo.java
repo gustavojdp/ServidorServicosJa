@@ -69,7 +69,6 @@ public class dbMongo {
         private String street;
         private String city;
         private String state;
-        private String zip;
 
         // Getters e setters
         public String getStreet() {
@@ -96,12 +95,6 @@ public class dbMongo {
             this.state = state;
         }
 
-        public String getZip() {
-            return zip;
-        }
 
-        public void setZip(String zip) {
-            this.zip = zip;
-        }
     }
 }
