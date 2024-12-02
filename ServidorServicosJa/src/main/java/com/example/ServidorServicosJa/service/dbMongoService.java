@@ -30,22 +30,12 @@ public class dbMongoService {
         }
     }
 
-    public List<dbMongo> listarUsuarios() {
-        List<dbMongo> usuarios = mongoRepository.findAll();
-        System.out.println("Usuários encontrados: " + usuarios.size());
-
-        // Teste com MongoTemplate
-        List<dbMongo> usuariosTemplate = mongoTemplate.findAll(dbMongo.class);
-        System.out.println("Usuários encontrados no MongoTemplate: " + usuariosTemplate.size());
-
-        return usuarios;
-    }
-
-
+    // Método para buscar um usuário por ID
     public dbMongo buscarUsuarioPorId(String id) {
         return mongoRepository.findById(id).orElse(null);
     }
 
+    // Método para salvar um novo usuário
     public dbMongo salvarUsuario(dbMongo usuario) {
         return mongoRepository.save(usuario);
     }

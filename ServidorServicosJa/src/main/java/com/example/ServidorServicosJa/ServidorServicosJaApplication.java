@@ -41,52 +41,14 @@ public class ServidorServicosJaApplication {
 		}
 
 		// Exibir a mensagem uma vez
-		System.out.println("O servidor está ativo! Para desativá-lo, use o comando \"desativar\".\n");
+		System.out.println("O servidor está ativo! Aguardando requisições...\n");
 
-		// Criar uma thread separada para o loop de comandos
-		Thread comandoThread = new Thread(() -> {
-			// Loop para aguardar comandos
-			while (true) {
-				System.out.print("> ");
+		// A partir daqui, o Spring Boot fica no controle do servidor e ele não vai mais pedir comandos.
 
-				String comando = null;
-				try {
-					comando = Teclado.getUmString().trim();  // Remover espaços em branco extras
-				} catch (Exception erro) {
-					System.err.println("Erro ao ler o comando!");
-				}
+		// Não há necessidade do loop de comandos
+		// O servidor agora ficará aguardando as requisições e mantendo os logs do Spring Boot, MongoDB, etc.
 
-				if (comando != null && comando.equalsIgnoreCase("desativar")) {
-					synchronized (usuarios) {
-						ComunicadoDeDesligamento comunicadoDeDesligamento = new ComunicadoDeDesligamento();
-
-						for (Parceiro usuario : usuarios) {
-							try {
-								usuario.receba(comunicadoDeDesligamento);
-								usuario.adeus();
-							} catch (Exception erro) {
-								// Ignora erros ao tentar desconectar o usuário
-							}
-						}
-					}
-
-					System.out.println("O servidor foi desativado!\n");
-					context.close(); // Fechar a aplicação Spring Boot
-					break; // Interromper o loop de comandos
-				} else {
-					System.err.println("Comando inválido! Digite 'desativar' para desligar o servidor.\n");
-				}
-			}
-		});
-
-		// Iniciar a thread do comando
-		comandoThread.start();
-
-		try {
-			// Esperar a thread de comandos terminar para finalizar o servidor
-			comandoThread.join();
-		} catch (InterruptedException e) {
-			System.err.println("Erro ao aguardar a thread de comandos.");
-		}
+		// Caso precise interromper o servidor manualmente, o Spring Boot pode ser fechado automaticamente:
+		// context.close(); // Isso pode ser chamado de outro lugar para parar o servidor programaticamente, se necessário.
 	}
 }

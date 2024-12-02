@@ -15,11 +15,7 @@ public class StatusController {
     @Autowired
     private dbMongoService userService;
 
-    @GetMapping
-    public ResponseEntity<List<dbMongo>> listarUsuarios() {
-        return ResponseEntity.ok(userService.listarUsuarios());
-    }
-
+    // Requisição GET para buscar um usuário pelo ID
     @GetMapping("/{id}")
     public ResponseEntity<dbMongo> buscarUsuarioPorId(@PathVariable String id) {
         dbMongo usuario = userService.buscarUsuarioPorId(id);
@@ -30,8 +26,16 @@ public class StatusController {
         }
     }
 
+    // Requisição POST para salvar um novo usuário
     @PostMapping
     public ResponseEntity<dbMongo> salvarUsuario(@RequestBody dbMongo usuario) {
-        return ResponseEntity.ok(userService.salvarUsuario(usuario));
+        // Validação do campo "status" (S ou N)
+        if (!usuario.getStatus().equals("S") && !usuario.getStatus().equals("N")) {
+            return ResponseEntity.badRequest().body(null); // Se o status não for "S" ou "N", retorna erro
+        }
+
+        // Salva o usuário
+        dbMongo usuarioSalvo = userService.salvarUsuario(usuario);
+        return ResponseEntity.ok(usuarioSalvo);
     }
 }
