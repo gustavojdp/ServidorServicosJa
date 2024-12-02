@@ -30,7 +30,7 @@ public class ServidorServicosJaApplication {
 		// Lista de parceiros (usuários)
 		ArrayList<Parceiro> usuarios = new ArrayList<Parceiro>();
 
-		// Iniciar a aceitadora de conexões
+		// Iniciar a aceitadora de conexões em uma thread separada
 		AceitadoraDeConexao aceitadoraDeConexao = null;
 		try {
 			aceitadoraDeConexao = new AceitadoraDeConexao(porta, usuarios);
@@ -40,38 +40,51 @@ public class ServidorServicosJaApplication {
 			return;
 		}
 
-		// Loop para aguardar comandos
-		for (;;) {
-			System.out.println("O servidor está ativo! Para desativá-lo,");
-			System.out.println("use o comando \"desativar\"\n");
-			System.out.print("> ");
+		// Criar uma thread separada para o loop de comandos
+		Thread comandoThread = new Thread(() -> {
+			// Loop para aguardar comandos
+			for (;;) {
+				System.out.println("O servidor está ativo! Para desativá-lo,");
+				System.out.println("use o comando \"desativar\"\n");
+				System.out.print("> ");
 
-			String comando = null;
-			try {
-				comando = Teclado.getUmString();
-			} catch (Exception erro) {
-			}
-
-			if (comando != null && comando.toLowerCase().equals("desativar")) {
-				synchronized (usuarios) {
-					ComunicadoDeDesligamento comunicadoDeDesligamento = new ComunicadoDeDesligamento();
-
-					for (Parceiro usuario : usuarios) {
-						try {
-							usuario.receba(comunicadoDeDesligamento);
-							usuario.adeus();
-						} catch (Exception erro) {
-						}
-					}
+				String comando = null;
+				try {
+					comando = Teclado.getUmString().trim();  // Remover espaços em branco extras
+				} catch (Exception erro) {
+					System.err.println("Erro ao ler o comando!");
 				}
 
-				System.out.println("O servidor foi desativado!\n");
-				// Fechar o contexto da aplicação Spring Boot
-				context.close(); // Fechar a aplicação Spring Boot
-				return;
-			} else {
-				System.err.println("Comando inválido!\n");
+				if (comando != null && comando.equalsIgnoreCase("desativar")) {
+					synchronized (usuarios) {
+						ComunicadoDeDesligamento comunicadoDeDesligamento = new ComunicadoDeDesligamento();
+
+						for (Parceiro usuario : usuarios) {
+							try {
+								usuario.receba(comunicadoDeDesligamento);
+								usuario.adeus();
+							} catch (Exception erro) {
+							}
+						}
+					}
+
+					System.out.println("O servidor foi desativado!\n");
+					context.close(); // Fechar a aplicação Spring Boot
+					break; // Interromper o loop de comandos
+				} else {
+					System.err.println("Comando inválido! Digite 'desativar' para desligar o servidor.\n");
+				}
 			}
+		});
+
+		// Iniciar a thread do comando
+		comandoThread.start();
+
+		try {
+			// Esperar a thread de comandos terminar para finalizar o servidor
+			comandoThread.join();
+		} catch (InterruptedException e) {
+			System.err.println("Erro ao aguardar a thread de comandos.");
 		}
 	}
 }
