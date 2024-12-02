@@ -40,41 +40,38 @@ public class ServidorServicosJaApplication {
 			return;
 		}
 
-		// Cria uma nova thread para o loop de comandos
-		new Thread(() -> {
-			for (;;) {
-				System.out.println("O servidor está ativo! Para desativá-lo,");
-				System.out.println("use o comando \"desativar\"\n");
-				System.out.print("> ");
+		// Loop para aguardar comandos
+		for (;;) {
+			System.out.println("O servidor está ativo! Para desativá-lo,");
+			System.out.println("use o comando \"desativar\"\n");
+			System.out.print("> ");
 
-				String comando = null;
-				try {
-					comando = Teclado.getUmString(); // Espera o comando do usuário
-				} catch (Exception erro) {
-					erro.printStackTrace(); // Tratar qualquer erro de leitura
-				}
+			String comando = null;
+			try {
+				comando = Teclado.getUmString();
+			} catch (Exception erro) {
+			}
 
-				if (comando != null && comando.toLowerCase().equals("desativar")) {
-					synchronized (usuarios) {
-						ComunicadoDeDesligamento comunicadoDeDesligamento = new ComunicadoDeDesligamento();
+			if (comando != null && comando.toLowerCase().equals("desativar")) {
+				synchronized (usuarios) {
+					ComunicadoDeDesligamento comunicadoDeDesligamento = new ComunicadoDeDesligamento();
 
-						for (Parceiro usuario : usuarios) {
-							try {
-								usuario.receba(comunicadoDeDesligamento);
-								usuario.adeus();
-							} catch (Exception erro) {
-								erro.printStackTrace(); // Tratar erro ao enviar comunicado
-							}
+					for (Parceiro usuario : usuarios) {
+						try {
+							usuario.receba(comunicadoDeDesligamento);
+							usuario.adeus();
+						} catch (Exception erro) {
 						}
 					}
-
-					System.out.println("O servidor foi desativado!\n");
-					SpringApplication.exit(context);  // Fechar a aplicação Spring Boot
-					return;
-				} else {
-					System.err.println("Comando inválido!\n");
 				}
+
+				System.out.println("O servidor foi desativado!\n");
+				// Fechar o contexto da aplicação Spring Boot
+				context.close(); // Fechar a aplicação Spring Boot
+				return;
+			} else {
+				System.err.println("Comando inválido!\n");
 			}
-		}).start();  // Inicia a thread para o loop de comandos
+		}
 	}
 }
