@@ -40,12 +40,13 @@ public class ServidorServicosJaApplication {
 			return;
 		}
 
+		// Exibir a mensagem uma vez
+		System.out.println("O servidor está ativo! Para desativá-lo, use o comando \"desativar\".\n");
+
 		// Criar uma thread separada para o loop de comandos
 		Thread comandoThread = new Thread(() -> {
 			// Loop para aguardar comandos
-			for (;;) {
-				System.out.println("O servidor está ativo! Para desativá-lo,");
-				System.out.println("use o comando \"desativar\"\n");
+			while (true) {
 				System.out.print("> ");
 
 				String comando = null;
@@ -64,6 +65,7 @@ public class ServidorServicosJaApplication {
 								usuario.receba(comunicadoDeDesligamento);
 								usuario.adeus();
 							} catch (Exception erro) {
+								// Ignora erros ao tentar desconectar o usuário
 							}
 						}
 					}
